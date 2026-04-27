@@ -12,12 +12,6 @@ export interface LlmResult {
   summary: string;
 }
 
-export interface WaybackResult {
-  change_percent: number | null;
-  snapshots_count: number;
-  first_snapshot: string | null; // ISO timestamp
-}
-
 export interface DomainResult {
   domain: string;
   domain_score: number; // 0-100
@@ -34,7 +28,6 @@ export interface AnalyzeResponse {
   url: string;
   final_score: number; // 0-100
   llm: LlmResult;
-  wayback: WaybackResult | null;
   domain: DomainResult;
   community: CommunityResult | null;
   cached: boolean;
@@ -54,7 +47,6 @@ export interface VotesResponse {
 export const SCORE_WEIGHTS = {
   llm: 0.5,
   domain: 0.25,
-  wayback: 0.15,
   community: 0.1,
 } as const;
 
