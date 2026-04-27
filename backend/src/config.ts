@@ -8,8 +8,8 @@ function required(name: string, fallback?: string): string {
 
 export const config = {
   port: Number(process.env.PORT ?? 3000),
-  ollamaUrl: required("OLLAMA_LLAMA_URL", "http://100.117.62.118:11434"),
-  ollamaModel: required("OLLAMA_LLAMA_MODEL", "llama3.2"),
+  ollamaUrl: required("OLLAMA_URL", "http://192.168.109.101:11434"),
+  ollamaModel: required("OLLAMA_MODEL", "llama3.2"),
   supabaseUrl: process.env.SUPABASE_URL ?? "",
   supabaseKey: process.env.SUPABASE_KEY ?? "",
   corsOrigins: (process.env.CORS_ORIGINS ?? "chrome-extension://*")
