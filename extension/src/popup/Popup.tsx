@@ -54,17 +54,17 @@ export function Popup() {
 
   return (
     <div
-      className="p-1.5 rounded-3xl overflow-hidden"
+      className="p-1.5 overflow-hidden"
       style={{
         background:
           "linear-gradient(326deg, rgba(14, 124, 134, 1) 0%, rgba(164, 218, 222, 1) 100%)",
       }}
     >
-      <div className="flex flex-col text-sm text-gray-900 bg-white rounded-[18px] max-h-[560px]">
+      <div className="flex flex-col text-sm text-gray-900 bg-white max-h-[560px]">
         {/* sticky header */}
         <div className="flex items-center gap-2 p-5 pb-4 shrink-0  select-none">
           <img
-            src="../../icons/fakescope-icon.svg"
+            src="/icons/fakescope-icon.svg"
             alt="FakeScope logo"
             className="aspect-square h-10"
           />
@@ -86,7 +86,7 @@ export function Popup() {
         </div>
         <hr />
         {loading && (
-          <div className="space-y-3 animate-pulse">
+          <div className="space-y-3 animate-pulse p-5">
             <div className="flex items-center gap-4 p-3 rounded-lg border border-gray-200">
               <div className="w-[100px] h-[100px] rounded-full bg-gray-200" />
               <div className="flex-1 space-y-2">
@@ -111,7 +111,7 @@ export function Popup() {
           </div>
         )}
         {error && (
-          <div className="p-4 rounded-2xl bg-red-700 text-xs text-red-300">
+          <div className="m-5 p-4 rounded-2xl bg-red-700 text-xs text-red-300">
             <div className="font-semibold mb-1 text-base text-white flex gap-1.5 items-center">
               <AlertTriangle size={20} strokeWidth={2.5} />
               Wystąpił błąd

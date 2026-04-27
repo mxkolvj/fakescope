@@ -1,4 +1,8 @@
 import { ShieldCheck, ShieldAlert, ShieldX } from "lucide-react";
+interface Props {
+  score: number;
+  verdict: string;
+}
 
 function colorFor(score: number): {
   ring: string;

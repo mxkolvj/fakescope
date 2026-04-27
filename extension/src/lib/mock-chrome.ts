@@ -55,7 +55,9 @@ export const MOCK_RESULT: AnalyzeResponse = {
   url: "chrome://settings",
   final_score: 64,
   cached: false,
+  generated_at: "2021-03-15T10:22:00Z",
   llm: {
+    score: 62,
     verdict: "Partially reliable",
     summary:
       "The article presents mostly factual information but contains some sensationalist language and lacks primary sources for key claims.",
@@ -75,10 +77,12 @@ export const MOCK_RESULT: AnalyzeResponse = {
     change_percent: 39,
   },
   domain: {
+    domain: "example.com",
     domain_score: 71,
     flags: ["known_outlet", "no_https_issues"],
   },
   community: {
+    community_score: 80,
     up: 12,
     down: 3,
   },
