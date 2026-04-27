@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "react";
 import { ShieldCheck, ShieldAlert, ShieldX } from "lucide-react";
+
 interface Props {
   score: number;
   verdict: string;
@@ -33,6 +35,36 @@ export function ScoreCard({ score, verdict }: Props) {
   const radius = 44;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - score / 100);
+  const circleRef = useRef<SVGCircleElement>(null);
+  const countRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const circle = circleRef.current;
+    const countEl = countRef.current;
+    if (!circle || !countEl) return;
+
+    // Start od pełnego offset (puste kółko)
+    circle.style.strokeDashoffset = String(circumference);
+
+    // Animacja kółka
+    requestAnimationFrame(() => {
+      circle.style.transition =
+        "stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1)";
+      circle.style.strokeDashoffset = String(offset);
+    });
+
+    // Animacja licznika 0 → score
+    const duration = 900;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      // ease out cubic
+      const eased = 1 - Math.pow(1 - t, 3);
+      countEl.textContent = String(Math.round(eased * score));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [score]);
 
   return (
     <div className="flex items-center gap-4 rounded-2xl my-3">
@@ -51,23 +83,28 @@ export function ScoreCard({ score, verdict }: Props) {
             strokeWidth="10"
           />
           <circle
+            ref={circleRef}
             cx="50"
             cy="50"
             r={radius}
-            className={`${ring} fill-none transition-all`}
+            className={`${ring} fill-none`}
             strokeWidth="10"
             strokeDasharray={circumference}
-            strokeDashoffset={offset}
+            strokeDashoffset={circumference}
             strokeLinecap="round"
           />
         </svg>
-        {/* ikona na środku */}
         <div className="absolute inset-0 flex items-center justify-center">
           {icon}
         </div>
       </div>
       <div className="flex flex-col">
-        <span className={`text-4xl font-bold ${text}`}>{score}</span>
+        <span
+          ref={countRef}
+          className={`text-4xl font-bold tabular-nums ${text}`}
+        >
+          0
+        </span>
         <span className="text-xs text-gray-600">{verdict}</span>
       </div>
     </div>
