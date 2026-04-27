@@ -24,6 +24,20 @@ await app.register(cors, {
 await app.register(redisPlugin);
 await app.register(supabasePlugin);
 
+app.addHook("onSend", async (_req, reply, payload) => {
+  if (
+    typeof payload === "string" &&
+    reply.getHeader("content-type")?.toString().includes("application/json")
+  ) {
+    try {
+      return JSON.stringify(JSON.parse(payload), null, 2);
+    } catch {
+      return payload;
+    }
+  }
+  return payload;
+});
+
 app.get("/health", async () => ({ ok: true }));
 
 await app.register(analyzeRoute);
