@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "FakeScope",
+  "version": "0.1.0",
+  "description": "Score news article credibility with a local LLM, Wayback history, domain reputation, and community votes.",
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_title": "FakeScope"
+  },
+  "background": {
+    "service_worker": "src/background/service-worker.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/index.ts"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["activeTab", "storage", "scripting"],
+  "host_permissions": ["http://localhost:3000/*", "<all_urls>"]
+}
