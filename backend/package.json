@@ -15,7 +15,6 @@
     "dotenv": "^16.4.5",
     "fastify": "^4.28.1",
     "fastify-plugin": "^4.5.1",
-    "ioredis": "^5.4.1",
     "whoiser": "^1.18.0"
   },
   "devDependencies": {
