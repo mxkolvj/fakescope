@@ -26,19 +26,22 @@ POSITIVE SIGNALS to look for:
 - Acknowledgement of opposing viewpoints or uncertainty
 - Consistent facts between headline, lead, and body
 
-OUTPUT FORMAT — respond with ONLY this JSON object, no prose, no markdown fences:
+IMPORTANT: Base your evaluation ONLY on the provided article text. Do not invent red flags or positive signals that are not directly evidenced in the text. If unsure, give fewer flags rather than guessing.
+
+OUTPUT FORMAT — respond with ONLY this JSON object, no prose, no markdown fences, no extra fields:
 {
   "score": <integer 0-100>,
   "verdict": "<one crisp sentence summarising the credibility judgement>",
-  "red_flags": ["<specific red flag found>", ...],
-  "positive_signals": ["<specific positive signal found>", ...],
-  "summary": "<2-3 sentences: what the article claims, what undermines or supports it, overall judgement>"
+  "red_flags": ["<specific red flag found in THIS article>", ...],
+  "positive_signals": ["<specific positive signal found in THIS article>", ...],
+  "summary": "<2-3 sentences: what the article claims, what undermines or supports it>"
 }
+CRITICAL: Output ONLY valid JSON. Do not include any text outside the JSON object.
 
-If the article text is missing or too short to evaluate, base the score on the URL domain and title alone and set score to 50 unless the title itself is clearly sensational. The output JSON must contain information in Polish language.`;
+If the article text is missing or too short to evaluate, base the score on the URL domain and title alone and set score to 50 unless the title itself is clearly sensational.`;
 
 const FALLBACK: LlmResult = {
-  score: 50,
+  score: 67,
   verdict: "Unable to analyze",
   red_flags: [],
   positive_signals: [],
@@ -60,6 +63,7 @@ function buildUserPrompt(input: {
   const { url, title, text } = input;
   const trimmed = text.trim();
 
+  console.log("TRIMMED: ", trimmed);
   if (!trimmed || trimmed.length < 100) {
     return `URL: ${url}\nTitle: ${title}\n\nNote: No article body was provided. Evaluate based on the URL domain and title only.`;
   }
@@ -104,7 +108,7 @@ export async function analyzeWithLlm(input: {
   const userPrompt = buildUserPrompt(input);
 
   const ctrl = new AbortController();
-  const timeout = setTimeout(() => ctrl.abort(), 60_000);
+  const timeout = setTimeout(() => ctrl.abort(), 120_000);
 
   try {
     const res = await fetch(`${config.ollamaUrl}/api/chat`, {
@@ -119,7 +123,7 @@ export async function analyzeWithLlm(input: {
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userPrompt },
         ],
-        options: { temperature: 0.2 },
+        options: { temperature: 0.2, num_predict: 400 },
       }),
     });
     if (!res.ok) throw new Error(`ollama ${res.status}`);
@@ -127,6 +131,7 @@ export async function analyzeWithLlm(input: {
     const content = body.message?.content ?? "";
     return coerce(extractJson(content));
   } catch (err) {
+    console.log(err);
     return { ...FALLBACK, summary: `LLM error: ${(err as Error).message}` };
   } finally {
     clearTimeout(timeout);

@@ -62,9 +62,7 @@ export default async function analyzeRoute(app: FastifyInstance) {
         app.log.warn({ err }, "redis read failed");
       }
 
-      // [NEW] If text is missing, the backend fetches it since the AI can't
-      if (!text || text.length < 200) {
-        app.log.info({ url }, "Fetching website content for LLM...");
+      if (text == "" || !text) {
         text = await fetchPageContent(url);
       }
 
