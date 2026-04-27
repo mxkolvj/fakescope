@@ -14,9 +14,10 @@ export function HistoryDiff({ wayback }: Props) {
     );
   }
   const warn = (wayback.change_percent ?? 0) > 30;
+  const bigwarn = (wayback.change_percent ?? 0) > 60;
   return (
     <div
-      className={`p-2 rounded text-xs ${warn ? "bg-amber-50 text-amber-900" : "bg-gray-50 text-gray-700"}`}
+      className={`p-2 rounded text-xs ${warn ? (bigwarn ? "bg-red-200 text-red-900" : "bg-amber-100 text-amber-900") : "bg-gray-50 text-gray-700"}`}
     >
       <div className="font-semibold uppercase tracking-wide text-[10px] mb-1">
         Historia Wayback Machine
@@ -36,10 +37,16 @@ export function HistoryDiff({ wayback }: Props) {
       {wayback.change_percent !== null && (
         <div className="space-y-1">
           Odchył treści: <strong>{wayback.change_percent}%</strong>{" "}
-          {warn && (
+          {warn && !bigwarn && (
             <div className="flex items-center gap-1 font-semibold">
               <AlertTriangle size={14} className="text-amber-600" />
               Znaczące zmiany
+            </div>
+          )}
+          {bigwarn && (
+            <div className="flex items-center gap-1 font-semibold">
+              <AlertTriangle size={14} className="text-red-600 animate-ping" />
+              Bardzo znaczące zmiany
             </div>
           )}
         </div>

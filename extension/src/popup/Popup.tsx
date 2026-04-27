@@ -33,7 +33,6 @@ export function Popup() {
   useEffect(() => {
     if (import.meta.env.DEV) {
       setTimeout(() => {
-        setNotArticle(true);
         setResult(MOCK_RESULT);
         setLoading(false);
       }, 1500); // symuluje loading
@@ -133,32 +132,35 @@ export function Popup() {
               <p className="text-sm">{result.llm.summary}</p>
             </div>
             <hr />
-            {result.llm.red_flags.length > 0 && (
-              <div>
-                <div className="font-semibold mb-1 text-xs text-red-600 flex gap-1.5 items-center uppercase">
-                  <AlertCircle size={16} strokeWidth={2.5} />
-                  Sygnały ostrzegawcze
+            <div className="py-2 flex flex-col gap-4">
+              {result.llm.red_flags.length > 0 && (
+                <div>
+                  <div className="font-semibold mb-1 text-xs text-red-600 flex gap-1.5 items-center uppercase">
+                    <AlertCircle size={16} strokeWidth={2.5} />
+                    Sygnały ostrzegawcze
+                  </div>
+                  <ul className="list-disc pl-5 text-sm">
+                    {result.llm.red_flags.map((f, i) => (
+                      <li key={i}>{f}</li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="list-disc pl-5 text-sm">
-                  {result.llm.red_flags.map((f, i) => (
-                    <li key={i}>{f}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {result.llm.positive_signals.length > 0 && (
-              <div>
-                <div className="font-semibold mb-1 text-xs text-green-600 flex gap-1.5 items-center uppercase">
-                  <CircleCheckBig size={16} strokeWidth={2.5} />
-                  Pozytywne sygnały
+              )}
+              {result.llm.positive_signals.length > 0 && (
+                <div>
+                  <div className="font-semibold mb-1 text-xs text-green-600 flex gap-1.5 items-center uppercase">
+                    <CircleCheckBig size={16} strokeWidth={2.5} />
+                    Pozytywne sygnały
+                  </div>
+                  <ul className="list-disc pl-5 text-sm">
+                    {result.llm.positive_signals.map((f, i) => (
+                      <li key={i}>{f}</li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="list-disc pl-5 text-sm">
-                  {result.llm.positive_signals.map((f, i) => (
-                    <li key={i}>{f}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+              )}
+            </div>
+            <hr />
             <HistoryDiff wayback={result.wayback} />
             <div className="flex items-center gap-2 pt-4 border-t">
               <span className="text-xs text-gray-500">Głosuj:</span>

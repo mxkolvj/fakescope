@@ -53,7 +53,7 @@ export function setupMockChrome() {
 
 export const MOCK_RESULT: AnalyzeResponse = {
   url: "chrome://settings",
-  final_score: 63,
+  final_score: 64,
   cached: false,
   llm: {
     verdict: "Partially reliable",
@@ -72,7 +72,7 @@ export const MOCK_RESULT: AnalyzeResponse = {
   wayback: {
     snapshots_count: 14,
     first_snapshot: "2021-03-15T10:22:00Z",
-    change_percent: 38,
+    change_percent: 39,
   },
   domain: {
     domain_score: 71,
