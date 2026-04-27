@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import type { FastifyInstance } from 'fastify';
 import type { AnalyzeResponse } from '@fakescope/shared';
 import { analyzeWithLlm } from '../services/llm.js';
@@ -64,14 +63,6 @@ export default async function analyzeRoute(app: FastifyInstance) {
       getCommunity(app, url),
     ]);
 
-    const response = aggregate({ url, llm, wayback, domain, community });
-
-    try {
-      await app.redis.set(key, JSON.stringify(response), 'EX', CACHE_TTL_SECONDS);
-    } catch (err) {
-      app.log.warn({ err }, 'redis write failed');
-    }
-
-    return response;
+    return aggregate({ url, llm, wayback, domain, community });
   });
 }
