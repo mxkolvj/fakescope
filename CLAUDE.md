@@ -4,6 +4,7 @@ Chrome MV3 extension that scores news article credibility using a local LLM (Oll
 Wayback Machine history, domain reputation, and community votes. Backend in Fastify.
 
 ## Layout
+
 - `backend/` — Fastify API. Owners: Igor (analyze + wayback), Paweł (domain + votes + supabase).
 - `extension/` — React + Vite MV3 extension. Owner: Oskar.
 - `packages/shared/` — TypeScript types shared between backend and extension. Owner: Mikołaj.
@@ -27,15 +28,18 @@ pnpm dev:extension                   # builds extension/dist (load unpacked in C
 ```
 
 ## API contract
+
 - `POST /analyze` `{ url, title, text }` → `AnalyzeResponse` (see `packages/shared`)
 - `GET /domain?url=…` → `{ domain_score, flags[] }`
 - `GET /votes?url=…` → `{ up, down }`
-- `POST /votes` `{ url, vote: 1 | -1, voter_id }` → `{ ok: true }`
+- `POST /votes` `{ url, vote: 1 | -1, user_hash }` → `{ ok: true }`
 
 ## Score formula
+
 `final = llm*0.5 + domain*0.25 + wayback*0.15 + community*0.1` — clamped 0–100.
 
 ## Conventions
+
 - TypeScript strict mode everywhere.
 - All cross-boundary types live in `packages/shared`.
 - Services must never throw — return a typed fallback so `/analyze` always responds.

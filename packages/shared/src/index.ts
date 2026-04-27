@@ -44,7 +44,6 @@ export interface AnalyzeResponse {
 export interface VoteRequest {
   url: string;
   vote: 1 | -1;
-  voter_id: string;
 }
 
 export interface VotesResponse {
