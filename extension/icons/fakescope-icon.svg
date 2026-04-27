@@ -1,0 +1,42 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">FakeScope extension icon</title>
+  <desc id="desc">A rounded square icon showing a news document, a scope lens, and a credibility check for a browser extension that evaluates article trustworthiness.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="16" y1="12" x2="112" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0E7C86"/>
+      <stop offset="1" stop-color="#0A5560"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="34" y1="26" x2="88" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#EAF2F4"/>
+    </linearGradient>
+    <filter id="shadow" x="10" y="10" width="108" height="108" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#072B31" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#bg)"/>
+  <rect x="8" y="8" width="112" height="112" rx="28" stroke="#D7F0F2" stroke-opacity="0.10"/>
+
+  <g filter="url(#shadow)">
+    <path d="M36 28C36 24.6863 38.6863 22 42 22H70L92 44V84C92 87.3137 89.3137 90 86 90H42C38.6863 90 36 87.3137 36 84V28Z" fill="url(#paper)"/>
+    <path d="M70 22L92 44H76C72.6863 44 70 41.3137 70 38V22Z" fill="#CFE2E6"/>
+
+    <rect x="46" y="40" width="26" height="6" rx="3" fill="#0A5560" fill-opacity="0.90"/>
+    <rect x="46" y="52" width="28" height="4" rx="2" fill="#7EA6AE"/>
+    <rect x="46" y="60" width="20" height="4" rx="2" fill="#7EA6AE"/>
+    <rect x="46" y="68" width="24" height="4" rx="2" fill="#7EA6AE"/>
+  </g>
+
+  <g>
+    <circle cx="82" cy="78" r="24" fill="#12363C"/>
+    <circle cx="82" cy="78" r="18" fill="#0F646D"/>
+    <circle cx="82" cy="78" r="16" stroke="#DFF6F7" stroke-width="2" stroke-opacity="0.75"/>
+    <path d="M96.5 92.5L106 102" stroke="#12363C" stroke-width="8" stroke-linecap="round"/>
+    <path d="M95.5 91.5L104.5 100.5" stroke="#DDF6F7" stroke-width="3.5" stroke-linecap="round"/>
+
+    <path d="M73 79.5L79 85.5L91.5 72.5" stroke="#F6B23C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M82 61C88.7 61 94.4823 64.9025 97 70.5625" stroke="#F6B23C" stroke-width="3.5" stroke-linecap="round" stroke-opacity="0.9"/>
+  </g>
+</svg>

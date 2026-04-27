@@ -1,7 +1,22 @@
 @tailwind base;
 @tailwind components;
+@tailwind base;
+@tailwind components;
 @tailwind utilities;
 
-html, body, #root {
+html,
+body,
+#root {
   width: 380px;
+  background-color: #000;
+  margin: auto;
+  margin-top: 20px;
+  font-family: "Inter", sans-serif;
+  width: 360px;
+  min-height: 200px;
+  max-height: 600px;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
 }

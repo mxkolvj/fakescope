@@ -13,17 +13,22 @@ function getOrCreateVoterId(): Promise<string> {
   });
 }
 
+export class NotArticleError extends Error {
+  constructor() {
+    super("Open a news article first");
+  }
+}
+
 export async function analyzeCurrentTab(): Promise<AnalyzeResponse> {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id || !tab.url) throw new Error("No active tab");
 
-  // dodaj to:
   if (
     tab.url.startsWith("chrome://") ||
     tab.url.startsWith("edge://") ||
     tab.url.startsWith("about:")
   ) {
-    throw new Error("Open a news article first");
+    throw new NotArticleError();
   }
 
   const cacheKey = `analyze:${tab.url}`;
@@ -47,11 +52,17 @@ export async function analyzeCurrentTab(): Promise<AnalyzeResponse> {
     text: "",
   };
 
+  // timeout
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10_000);
+
   const res = await fetch(`${BACKEND_URL}/analyze`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ url: tab.url, title, text }),
-  });
+    signal: controller.signal,
+  }).finally(() => clearTimeout(timeout));
+
   if (!res.ok) throw new Error(`backend ${res.status}`);
   const data = (await res.json()) as AnalyzeResponse;
   await chrome.storage.session.set({ [cacheKey]: data });

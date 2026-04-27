@@ -24,9 +24,8 @@ export function setupMockChrome() {
         },
       },
       local: {
-        // api.ts używa STAREGO stylu z callbackiem!
         get: (_keys: string[], cb: (res: Record<string, unknown>) => void) => {
-          cb({});
+          cb({ user_hash: "mock-user-123" }); // ← było voter_id, zmień na user_hash
         },
         set: (_obj: Record<string, unknown>, cb?: () => void) => {
           cb?.();
