@@ -40,3 +40,28 @@ pnpm dev:extension                   # builds extension/dist (load unpacked in C
 - All cross-boundary types live in `packages/shared`.
 - Services must never throw — return a typed fallback so `/analyze` always responds.
 - Cache `/analyze` results in Redis for 1h, keyed by SHA-256 of the URL.
+
+## Time table
+👨‍💻 Mikołaj (Full Stack) — setup + integracja
+H1–H2 — Repo setup: monorepo, package.json w root, Supabase projekt, zmienne środowiskowe, Fastify skeleton działający lokalnie u wszystkich, CLAUDE.md w repo
+H3–H5 — ★ llm.ts prompt engineering: iterowanie promptu do Ollamy żeby zwracała stabilny JSON bez halucynacji. llama3.1:8b bywa nieposłuszny — trzeba przetestować kilka wariantów system promptu i zabezpieczyć parser
+H6–H8 — score.ts: agregacja wyników z trzech serwisów, testy na edge-casach (Wayback nie odpowiada, domena bez whois, LLM zwraca śmieci), upewnienie się że final_score ma sens na różnych artykułach
+H9–H10 — Demo prep, README, pomoc przy bugach integracyjnych
+
+🖥️ Igor (Backend) — core route + cache
+H1–H2 — ★ wayback.ts: CDX API → pierwsze i najnowsze snapshoty, fetch HTML obu wersji, porównanie długości tekstu, change_percent. Timeout 8s + fallback — Wayback bywa wolny jak diabli
+H3–H5 — analyze.ts route: Promise.all([llm, wayback, domain]), integracja Redis (ioredis) z TTL 1h kluczowany po URL, walidacja request body przez Fastify schema
+H6–H8 — Rate limiting w Fastify (@fastify/rate-limit), error handling gdy Ollama nie odpowiada (np. nikt nie odpalił ollama serve), testy end-to-end route'a
+H9–H10 — Pomoc przy integracji z extension, bugfixing
+
+🎨 Oskar (Frontend) — extension
+H1–H2 — ★ Chrome Extension setup: Manifest V3, Vite + @crxjs/vite-plugin, React + Tailwind, pierwsze załadowanie dist/ w chrome://extensions bez błędów (tu najwięcej traci się czasu)
+H3–H5 — content/index.ts: wyciąganie tekstu artykułu (target article, main, .post-content, fallback body, strip nav/footer/aside). service-worker.ts: komunikacja content script → /analyze → cache w chrome.storage.session
+H6–H8 — UI: ScoreCard.tsx (kółko score czerwony/żółty/zielony, lista flag), HistoryDiff.tsx (zmiana % z ostrzeżeniem >30%), loading state, obsługa błędu gdy backend nie odpowiada
+H9–H10 — Polish UI, ikona extensiona, testy na kilku różnych stronach newsowych
+
+⚙️ Paweł (Backend) — domain + votes
+H1–H2 — domain.ts: wyciąganie domeny z URL, heurystyki punktowe (TLD, HTTPS, długość), integracja z URLhaus API (POST https://urlhaus-api.abuse.ch/v1/host/)
+H3–H5 — ★ Heurystyki domenowe zakodowane jako punkty: suspicious TLD → -15, brak HTTPS → -20, domena < 6 miesięcy → -25 (użyj npm whois lub odpuść wiek na rzecz samego URLhaus jeśli whois będzie problematyczny). Return: { domain_score, flags[] }
+H6–H8 — votes.ts route: POST /votes + GET /votes?url=, Supabase schema (votes tabela z upsert po URL + hashed IP), klient Supabase w db/supabase.ts
+H9–H10 — Swagger/dokumentacja endpointów (Fastify ma to out-of-the-box z @fastify/swagger), pomoc przy deploymencie
