@@ -128,6 +128,8 @@ export function Popup() {
     }
   }
 
+  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
   return (
     <div className={`tranisiton-all ${dark ? "dark" : ""}`}>
       {transitioning && (
@@ -254,7 +256,7 @@ export function Popup() {
                           className="opacity-0 animate-[fadeSlideIn_0.3s_ease_forwards]"
                           style={{ animationDelay: `${i * 60}ms` }}
                         >
-                          {f}
+                          {cap(f)}
                         </li>
                       ))}
                     </ul>
@@ -274,7 +276,7 @@ export function Popup() {
                           className="opacity-0 animate-[fadeSlideIn_0.3s_ease_forwards]"
                           style={{ animationDelay: `${i * 60}ms` }}
                         >
-                          {f}
+                          {cap(f)}
                         </li>
                       ))}
                     </ul>
