@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import type { FastifyInstance } from "fastify";
 import type { AnalyzeResponse } from "@fakescope/shared";
 import { analyzeWithLlm } from "../services/llm.js";
-import { checkWayback } from "../services/wayback.js";
+// import { checkWayback } from "../services/wayback.js";
 import { checkDomain } from "../services/domain.js";
 import { aggregate, communityScore } from "../services/score.js";
 import { fetchPageContent } from "../services/scraper.js"; // [NEW]
@@ -68,12 +68,13 @@ export default async function analyzeRoute(app: FastifyInstance) {
         text = await fetchPageContent(url);
       }
 
-      const [llm, wayback, domain, community] = await Promise.all([
+      const [llm, /*wayback,*/ domain, community] = await Promise.all([
         analyzeWithLlm({ url, title, text }),
-        checkWayback(url),
+        // checkWayback(url),
         checkDomain(url),
         getCommunity(app, url),
       ]);
+      const wayback = null;
 
       const response = aggregate({ url, llm, wayback, domain, community });
 
