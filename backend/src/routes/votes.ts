@@ -39,7 +39,8 @@ export default async function votesRoute(app: FastifyInstance) {
       return reply.code(400).send({ error: "url, vote (1 | -1) required" });
     }
     const ip = req.ip ?? "unknown";
-    const user_hash = createHash("sha256").update(ip).digest("hex");
+    const agent = req.headers["user-agent"] ?? "unknown";
+    const user_hash = createHash("sha256").update(`${ip}-${agent}`).digest("hex");
     if (!app.supabase)
       return reply.code(503).send({ error: "supabase not configured" });
 
